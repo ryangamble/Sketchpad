@@ -1,12 +1,10 @@
 var rows = 16; //Initial number of rows
 var cols = 16; //Initial number of columns
-var boxWidth = 100/cols + "%"; //Makes width of boxes responsive
-var conWidth = $('.container').width(); //Gets width of row element
-var boxHeight = conWidth*(1/cols); //Sets box height equal to initial box width
+var boxWidth; //Div.box width variable
+var conWidth; //Width of the container element
+var boxHeight; //Div.box height variable
 var gridColor = "white"; //Sets the initial background color
 var paintColor = "black"; //Sets the initial paint color
-var safeColors = ['00','33','66','99','cc','ff'];
-var paintValue = 2; //Sets the method of painting (hover/click)
 
 function createGrid() { //creates a grid based off of set row/cols
 	var row = rows;
@@ -17,38 +15,41 @@ function createGrid() { //creates a grid based off of set row/cols
 	for (var j = 0; j < col; j += 1) {
 		$('.row').append("<div class='box'></div>")
 	}
+	$("div.box").css("background-color",gridColor);
 }
 
-function setRows() { //Allows for the user to change the number of rows
-	$("button#rows").click(function() {
-		rows = prompt("How many rows would you like?");
-	});
+function deleteGrid() { //Removes all div.row/div.box elements
+	$('.container').empty();
 }
 
 function setBox() { //Sets the initial box size
+	boxWidth = 100/cols + "%";
+	conWidth = $('.container').width();
+	boxHeight = conWidth*(1/cols);
 	$("div.box").width(boxWidth).height(boxHeight);
 }
 
-function resetInk() { //Resets paint color to black
-	$("button#black").click(function() {
-		paintColor = "black";
+function resize() { //Allows the user to change the sketchpad dimensions
+	$("button#resize").click(function() {
+		rows = parseInt(prompt("How many rows would you like? (Must use an integer)"));
+		cols = parseInt(prompt("How many columns would you like? (Must use an integer)"));
+		deleteGrid();
+		createGrid();
+		setBox();
+		hoverPaint();
 	});
 }
 
-var rand = function() { //Generates a random number
-    return Math.floor(Math.random()*6);
+function paintCol() { //Changes the paint color
+	$("button#paint").click(function() {
+		paintColor = prompt("Set a color value. (Example: #ff0000 or red)");
+	});
 }
 
-function randomColor() { //Uses random number to generate rgb values
-    var r = safeColors[rand()];
-    var g = safeColors[rand()];
-    var b = safeColors[rand()];
-    return "#"+r+g+b;
-}
-
-function randCol() { //Sets paint color to random value
-	$("button#rainbow").click(function() {
-		paintColor = randomColor()
+function bkgrCol() { //Chanes the background color
+	$("button#bkgr").click(function() {
+		gridColor = prompt("Set a color value. (Example: #ff0000 or red)");
+		$("div.box").css("background-color",gridColor);
 	});
 }
 
@@ -78,19 +79,37 @@ function hoverMode() { //Switches to hover mode
 	});
 }
 
-function gridReset() { //Resets grid background
-	$("button#reset").click(function() { 
-		$("div.box").css("background-color",gridColor)
+function gridClear() { //Clears painted boxes
+	$("button#clear").click(function() {
+		deleteGrid();
+		createGrid();
+		setBox();
+		hoverPaint();
 	});
 }
 
-$(document).ready(function() { 
+function gridReset() { //Resets all values to default
+	$("button#reset").click(function() {
+		rows = 16;
+		col = 16;
+		gridColor = "white";
+		paintColor = "black";
+		deleteGrid();
+		createGrid();
+		setBox();
+		hoverPaint();
+	});
+}
+
+$(document).ready(function() { //Calls all the button functions/main functionality
 	createGrid();
 	setBox();
-	randCol();
-	resetInk();
+	resize();
+	paintCol();
+	bkgrCol();
 	hoverPaint();
 	clickMode();
 	hoverMode();
+	gridClear();
 	gridReset();
 });

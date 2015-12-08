@@ -1,0 +1,41 @@
+h1, p {
+	text-align: center;
+}
+
+h1 {
+	font-weight: 700;
+}
+
+p {
+	font-weight: 600;
+}
+
+.options {
+	text-align: center;
+}
+
+button {
+	margin: 20px 5px;
+}
+
+.container {
+	border: black solid 5px;
+	height: auto;
+	width: 80%;
+	margin: auto;
+}
+
+.row {
+	height: auto;
+	width: 100%;
+	margin-bottom: -5px;
+	padding: 0;
+}
+
+div.box {
+	display: inline-block;
+	height: 0px;
+	width: 0px;
+	margin: 0;
+	padding: 0;
+}
